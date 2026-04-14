@@ -244,7 +244,7 @@ def submit():
                             phone=phone))
 
 
-@app.route('/quiz')
+@app.route('/quiz', methods=["POST"])
 def quiz():
     name = request.args.get('name')
     student_class = request.args.get('student_class')
