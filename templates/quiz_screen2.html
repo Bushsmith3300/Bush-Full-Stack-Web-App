@@ -268,7 +268,7 @@ async function loadQuestions() {
   quizEl.style.display = 'none';
 
   try {
-    const res = await fetch('/https://bta-330.onrender.com/questions/energy_and_energy_changes')
+    const res = await fetch('/questions/energy_and_energy_changes')
     if (!res.ok) throw new Error('Network response was not ok');
 
     const data = await res.json();
