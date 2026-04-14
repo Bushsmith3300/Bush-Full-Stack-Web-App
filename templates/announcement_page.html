@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Standard Chemistry Questions for Ghanaian SHS Learners!">
+  <meta name="author" content="Emmanuel Asiamah Amponsah">
+  <meta name="keywords" content="chemistry, past questions, WAEC, teaching assistant, asiamah, learn">
+
+  <title>Bush Teaching Assistant!</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0a2a2f, #1a4a4f, #112f35);
+      color: #ffffff;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .heading {
+      font-size: 2.8rem;
+      background: linear-gradient(to right, #00ffea, #ff00cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 15px rgba(0, 255, 234, 0.3);
+    }
+
+    .announcement {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      padding: 28px;
+      margin: 25px auto;
+      max-width: 800px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    .announcement h1 {
+      font-size: 1.75rem;
+      margin-bottom: 15px;
+      color: #ffd700;
+    }
+
+    .announcement h2 {
+      font-size: 1.35rem;
+      margin: 20px 0;
+      line-height: 1.7;
+    }
+
+    .highlight {
+      color: yellow;
+      font-weight: bold;
+    }
+
+    a {
+      color: #00ffea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #ff00cc;
+    }
+
+    .disabled {
+      color: #888;
+      cursor: none;
+      pointer-events: none;
+    }
+
+    /* Navigation Links - Made Responsive */
+    .nav-links {
+      margin: 40px 20px 30px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .nav-links a {
+      background: rgba(255, 255, 255, 0.08);
+      color: #00ffea;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      text-align: center;
+      min-width: 160px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .nav-links a:hover {
+      background: rgba(0, 255, 234, 0.15);
+      border-color: #00ffea;
+      transform: translateY(-3px);
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 25px 0;
+      text-align: center;
+      margin-top: auto;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .footer-content p {
+      margin: 6px 0;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      .heading {
+        font-size: 2.3rem;
+      }
+      
+      .nav-links {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .nav-links a {
+        min-width: 80%;
+        padding: 16px 20px;
+      }
+      
+      .announcement {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1 class="heading">ANNOUNCEMENT PAGE</h1>
+
+    <div class="announcement">
+      <h1>Yaa Asantewaa Girls SHS</h1>
+      <h2>Announcement for 2 SCIENCE 7, 8, 9, 10, 11</h2>
+    </div>
+
+    <div class="announcement">
+      <h2>
+        Questions on Mole Concept ready. 
+        <a href="{{ url_for("form")}}"><span style="text-decoration:underline">
+			Click here to take the Quiz</span></a>
+      </h2>
+      <p style="margin-top: 15px; color: yellow; font-size: 25px">
+        Take a screen shot of your score at the end of the quiz and send it to 
+		<span style="color:white">BUSH</span> by clicking 
+        <a href="https://wa.me/233554454161" target="_blank">
+			<span style="text-decoration:underline">here</span></a>
+      </p>
+    </div>
+
+    <div class="announcement">
+      <h2>
+        ONLINE CLASS FOR:
+        <span class="highlight"> 2 Sci 7,</span><span class="highlight"> 2 Sci 8,</span>
+        <span class="highlight"> 2 Sci 9,</span><br><span class="highlight"> 2 Sci 10</span> and 
+		<span class="highlight"> 2 Sci 11</span> has ended successfully;<br><br>
+		<h2><span class="highlight">Date: 11th April 2026</span></h2><br><h2><span class="highlight">Started: 2:00 pm</span></h2>><h2><span class="highlight">Ended: 4:45 pm</span></h2>    
+      </h2>
+    </div>
+
+    <div class="announcement">
+      <a class="disabled" href="#">
+        Click here to enter classroom.<br>
+        <strong>Link currently disabled.</strong><br>
+        Thank you!
+      </a>
+    </div>
+
+  </div>
+
+  <div class="nav-links">
+    <a href="{{url_for("quiz")}}">Proceed to take Quiz</a><br>
+    <a href="{{url_for("page3")}}">← Go Back</a><br>
+    <a href="{{url_for("index")}}">Back to Home Page</a>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2026 Bush Teaching Assistant</p>
+        <p>Connecting learners and educators</p>
+        <p>Developed by Emmanuel Asiamah Amponsah</p>  
+    </div>
+  </footer>
+</body>
+</html>
