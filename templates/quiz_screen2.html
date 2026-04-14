@@ -224,7 +224,7 @@
 <div class="container">
   <h1>BTA Chemistry Quiz</h1>
   <p class="subtitle">Powered by Bush Software Inc..</p>
-  <h2 style="text-align:center">Mole Concept Questions</h2>
+  <h2 style="text-align:center">Energy and Energy Changes Questions</h2>
 
   <p id="progress"></p>
 
@@ -268,7 +268,7 @@ async function loadQuestions() {
   quizEl.style.display = 'none';
 
   try {
-    const res = await fetch('/questions/periodic_chemistry')
+    const res = await fetch('/https://bta-330.onrender.com/energy_and_energy_changes')
     if (!res.ok) throw new Error('Network response was not ok');
 
     const data = await res.json();
