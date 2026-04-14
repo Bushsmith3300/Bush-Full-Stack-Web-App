@@ -4,6 +4,7 @@ const studentName = "{{name}}";
 const studentClass = "{{ student_class }}";
 const studentPhone = "{{ phone }}";
 
+// ✅ First attempt storage
 const STORAGE_KEY = "bta_quiz_first_attempt_score";
 
 function shuffleArray(array) {
@@ -20,6 +21,7 @@ let userAnswers = [];
 // LOAD QUESTIONS
 async function loadQuestions() {
 
+  // 🔒 Check saved first attempt
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
     showSavedScore(JSON.parse(saved));
@@ -29,13 +31,23 @@ async function loadQuestions() {
   const loadingEl = document.getElementById('loading');
   const quizEl = document.getElementById('quiz-container');
 
+  loadingEl.style.display = 'block';
+  quizEl.style.display = 'none';
+
   try {
     const res = await fetch('/questions/energy_and_energy_changes');
+    if (!res.ok) throw new Error('Network response was not ok');
+
     const data = await res.json();
 
-    shuffleArray(data.questions);
+    const validQuestions = data.questions.filter(q => 
+      q.question && Array.isArray(q.options) && q.options.length > 0 && q.answer
+    );
 
-    allQuestions = data.questions.slice(0, 50);
+    if (validQuestions.length === 0) throw new Error('No valid questions found');
+
+    shuffleArray(validQuestions);
+    allQuestions = validQuestions.slice(0, 50);
     userAnswers = new Array(allQuestions.length).fill(null);
 
     loadingEl.style.display = 'none';
@@ -44,7 +56,12 @@ async function loadQuestions() {
     showQuestion();
 
   } catch (error) {
-    loadingEl.innerHTML = `<p style="color:red;">Failed to load questions</p>`;
+    console.error(error);
+    loadingEl.innerHTML = `
+      <div class="spinner"></div>
+      <p style="color:red; margin-top: 15px;">Failed to load questions.</p>
+      <button id="retry-btn" onclick="loadQuestions()">Retry</button>
+    `;
   }
 }
 
@@ -64,7 +81,7 @@ function showQuestion() {
     <div class="question-card">
       <h2>${q.question}</h2>
       <div class="options">${optionsHTML}</div>
-
+      
       <div id="feedback"></div>
       <div id="explanation"></div>
 
@@ -135,13 +152,10 @@ function showExplanation(q) {
   exp.style.display = 'block';
 }
 
-// NAVIGATION (✅ SCROLL FIX ADDED)
-
+// NAVIGATION
 function next() {
   currentIndex++;
-
   window.scrollTo({ top: 0, behavior: "smooth" });
-
   if (currentIndex >= allQuestions.length) return showScore();
   showQuestion();
 }
@@ -149,18 +163,14 @@ function next() {
 function prev() {
   if (currentIndex > 0) {
     currentIndex--;
-
     window.scrollTo({ top: 0, behavior: "smooth" });
-
     showQuestion();
   }
 }
 
 function skip() {
   currentIndex++;
-
   window.scrollTo({ top: 0, behavior: "smooth" });
-
   if (currentIndex >= allQuestions.length) return showScore();
   showQuestion();
 }
@@ -176,9 +186,12 @@ function showScore() {
   const total = allQuestions.length;
   const percent = Math.round((score / total) * 100);
 
+  // 🔒 Save only first attempt
   if (!localStorage.getItem(STORAGE_KEY)) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      score, total, percent,
+      score,
+      total,
+      percent,
       name: studentName,
       class: studentClass,
       phone: studentPhone
