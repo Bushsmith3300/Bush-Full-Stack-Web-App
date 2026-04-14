@@ -1,10 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Standard Chemistry Questions for Ghanaian SHS Learners!">
+  <meta name="author" content="Emmanuel Asiamah Amponsah">
+  <title>Chemistry Quiz</title>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      white-space: pre-line;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 20px;
+      flex: 1;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #00ffea, #ff00cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 40px;
+      opacity: 0.85;
+      font-size: 1.1rem;
+    }
+
+    #loading { text-align:center; margin-top:80px; }
+
+    #loading p {
+      margin-top: 15px;
+      font-size: 1.3rem;
+      color: #00ffea;
+    }
+
+    .spinner {
+      width: 65px;
+      height: 65px;
+      margin:auto;
+      border:6px solid rgba(255,255,255,0.15);
+      border-top:6px solid #00ffea;
+      border-radius:50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .question-card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 35px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+    }
+
+    #progress {
+      text-align:center;
+      font-size:1.3rem;
+      margin-bottom:10px;
+      font-weight:600;
+      color:#00ffea;
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      line-height: 1.6;
+      margin-bottom: 35px;
+    }
+
+    .options button {
+      width: 100%;
+      padding: 18px 22px;
+      margin: 5px 0;
+      font-size: 1.2rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .options button:hover:not(:disabled) {
+      background: rgba(255,255,255,0.15);
+      border-color: #00ffea;
+      transform: translateX(6px);
+    }
+
+    .options button::first-letter {
+      font-weight: bold;
+      color: #00ffea;
+    }
+
+    .options button.correct {
+      background: #00ff9d !important;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .options button.wrong {
+      background: #ff4d6d !important;
+      color: white;
+    }
+
+    #feedback {
+      margin: 25px 0;
+      font-size: 1.6rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #explanation {
+      background: rgba(255,255,255,0.1);
+      padding: 22px;
+      border-radius: 14px;
+      border-left: 6px solid #00ffea;
+      margin: 25px 0;
+      display: none;
+    }
+
+    .btn-group {
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap: wrap;
+      margin-top:20px;
+    }
+
+    button {
+      padding:12px 20px;
+      border:none;
+      border-radius:30px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    #prev-btn { background:#888; color:white; }
+    #next-btn { background:#00ffea; color:black; }
+    #skip-btn { background:#ff9800; color:white; }
+
+    .result-box {
+      text-align:center;
+      padding:40px;
+    }
+
+    .final-score {
+      font-size:4rem;
+      margin:15px 0;
+      background: linear-gradient(to right, #00ffea, #ff00cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .percentage {
+      font-size: 2rem;
+      color: #00ff9d;
+    }
+
+    footer {
+      background:#0f172a;
+      text-align:center;
+      padding:20px;
+      margin-top:auto;
+    }
+
+    #retry-btn {
+      margin-top: 15px;
+      background: #ff4d6d;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    a {
+      margin: 40px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      color: yellow;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    a:hover {
+      background: rgba(0, 255, 234, 0.2);
+      border-color: #00ffea;
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🧪 BTA Chemistry Quiz</h1>
+  <p class="subtitle">Powered by Bush Software Inc..</p>
+
+  <h2 style="text-align:center">Energy and Energy Changes Questions</h2>
+
+  <p id="progress"></p>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Loading questions... please wait</p>
+  </div>
+
+  <div id="quiz-container" style="display:none;"></div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Bush Teaching Assistant</p>
+  <p>Connecting learners and educators</p>
+  <p>Developed by Emmanuel Asiamah Amponsah</p>
+</footer>
+
 <script>
 
 const studentName = "{{name}}";
 const studentClass = "{{ student_class }}";
 const studentPhone = "{{ phone }}";
 
-// ✅ First attempt storage
+// ✅ KEY FOR FIRST ATTEMPT SAVE
 const STORAGE_KEY = "bta_quiz_first_attempt_score";
 
 function shuffleArray(array) {
@@ -21,7 +263,7 @@ let userAnswers = [];
 // LOAD QUESTIONS
 async function loadQuestions() {
 
-  // 🔒 Check saved first attempt
+  // 🔒 SHOW SAVED SCORE IF EXISTS
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
     showSavedScore(JSON.parse(saved));
@@ -36,17 +278,14 @@ async function loadQuestions() {
 
   try {
     const res = await fetch('/questions/energy_and_energy_changes');
-    if (!res.ok) throw new Error('Network response was not ok');
-
     const data = await res.json();
 
-    const validQuestions = data.questions.filter(q => 
-      q.question && Array.isArray(q.options) && q.options.length > 0 && q.answer
+    const validQuestions = data.questions.filter(q =>
+      q.question && Array.isArray(q.options) && q.answer
     );
 
-    if (validQuestions.length === 0) throw new Error('No valid questions found');
-
     shuffleArray(validQuestions);
+
     allQuestions = validQuestions.slice(0, 50);
     userAnswers = new Array(allQuestions.length).fill(null);
 
@@ -56,10 +295,9 @@ async function loadQuestions() {
     showQuestion();
 
   } catch (error) {
-    console.error(error);
     loadingEl.innerHTML = `
       <div class="spinner"></div>
-      <p style="color:red; margin-top: 15px;">Failed to load questions.</p>
+      <p style="color:red;">Failed to load questions</p>
       <button id="retry-btn" onclick="loadQuestions()">Retry</button>
     `;
   }
@@ -73,15 +311,13 @@ function showQuestion() {
     `Question ${currentIndex + 1} of ${allQuestions.length}`;
 
   let optionsHTML = '';
-  q.options.forEach(opt => {
-    optionsHTML += `<button>${opt}</button>`;
-  });
+  q.options.forEach(opt => optionsHTML += `<button>${opt}</button>`);
 
   document.getElementById('quiz-container').innerHTML = `
     <div class="question-card">
       <h2>${q.question}</h2>
       <div class="options">${optionsHTML}</div>
-      
+
       <div id="feedback"></div>
       <div id="explanation"></div>
 
@@ -99,28 +335,6 @@ function showQuestion() {
 
   const buttons = document.querySelectorAll('.options button');
   buttons.forEach(btn => btn.onclick = () => selectAnswer(btn, q));
-
-  if (currentIndex === 0) {
-    document.getElementById('prev-btn').disabled = true;
-    document.getElementById('prev-btn').style.opacity = 0.5;
-  }
-
-  if (currentIndex === allQuestions.length - 1) {
-    document.getElementById('skip-btn').disabled = true;
-    document.getElementById('skip-btn').style.opacity = 0.5;
-  }
-
-  if (userAnswers[currentIndex] !== null) {
-    const saved = userAnswers[currentIndex];
-    buttons.forEach(btn => {
-      const letter = btn.textContent.charAt(0);
-      if (letter === q.answer) btn.classList.add('correct');
-      if (letter === saved && saved !== q.answer) btn.classList.add('wrong');
-      btn.disabled = true;
-    });
-    showExplanation(q);
-    document.getElementById('next-btn').style.display = 'inline-block';
-  }
 }
 
 // SELECT ANSWER
@@ -135,17 +349,16 @@ function selectAnswer(btn, q) {
     if (b === btn && selected !== q.answer) b.classList.add('wrong');
   });
 
-  const feedback = document.getElementById('feedback');
-  feedback.innerHTML = selected === q.answer 
-    ? `<span style="color:#00ff9d;">✓ Correct!</span>`
-    : `<span style="color:#ff4d6d;">✗ Wrong!</span>`;
+  document.getElementById('feedback').innerHTML =
+    selected === q.answer
+      ? `<span style="color:#00ff9d;">✓ Correct!</span>`
+      : `<span style="color:#ff4d6d;">✗ Wrong!</span>`;
 
   showExplanation(q);
-
   document.getElementById('next-btn').style.display = 'inline-block';
 }
 
-// SHOW EXPLANATION
+// EXPLANATION
 function showExplanation(q) {
   const exp = document.getElementById('explanation');
   exp.innerHTML = `<strong>Explanation:</strong><br>${q.explanation || 'No explanation provided.'}`;
@@ -155,27 +368,27 @@ function showExplanation(q) {
 // NAVIGATION
 function next() {
   currentIndex++;
-  window.scrollTo({ top: 0, behavior: "smooth" });
   if (currentIndex >= allQuestions.length) return showScore();
+  window.scrollTo(0, 0);
   showQuestion();
 }
 
 function prev() {
   if (currentIndex > 0) {
     currentIndex--;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0);
     showQuestion();
   }
 }
 
 function skip() {
   currentIndex++;
-  window.scrollTo({ top: 0, behavior: "smooth" });
   if (currentIndex >= allQuestions.length) return showScore();
+  window.scrollTo(0, 0);
   showQuestion();
 }
 
-// SCORE
+// SCORE + SAVE FIRST ATTEMPT
 function showScore() {
   let score = 0;
 
@@ -186,7 +399,6 @@ function showScore() {
   const total = allQuestions.length;
   const percent = Math.round((score / total) * 100);
 
-  // 🔒 Save only first attempt
   if (!localStorage.getItem(STORAGE_KEY)) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       score,
@@ -201,7 +413,7 @@ function showScore() {
   showSavedScore({ score, total, percent, name: studentName, class: studentClass, phone: studentPhone });
 }
 
-// SHOW SAVED SCORE
+// SHOW SAVED SCORE (ON REFRESH)
 function showSavedScore(data) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('quiz-container').style.display = 'block';
@@ -226,3 +438,6 @@ function showSavedScore(data) {
 window.onload = loadQuestions;
 
 </script>
+
+</body>
+</html>
