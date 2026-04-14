@@ -255,3 +255,7 @@ def quiz():
                            student_class=student_class,
                            phone=phone)
 
+@app.route("/ping")
+def ping():
+    return "OK", 200
+
