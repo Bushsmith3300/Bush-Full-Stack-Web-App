@@ -255,8 +255,3 @@ def quiz():
                            student_class=student_class,
                            phone=phone)
 
-
-
-
-if __name__ == '__main__':
-    app.run (debug=True)
