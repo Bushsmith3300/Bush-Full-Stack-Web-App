@@ -277,7 +277,7 @@ async function loadQuestions() {
   quizEl.style.display = 'none';
 
   try {
-    const res = await fetch('/questions/energy_and_energy_changes');
+    const res = await fetch('/questions/equilibrium');
     const data = await res.json();
 
     const validQuestions = data.questions.filter(q =>
