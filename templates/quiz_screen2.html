@@ -246,7 +246,7 @@ const studentName = "{{name}}";
 const studentClass = "{{ student_class }}";
 const studentPhone = "{{ phone }}";
 
-// ✅ KEY FOR FIRST ATTEMPT SAVE
+// ✅ Session-only storage (clears on refresh)
 const STORAGE_KEY = "bta_quiz_first_attempt_score";
 
 function shuffleArray(array) {
@@ -262,13 +262,6 @@ let userAnswers = [];
 
 // LOAD QUESTIONS
 async function loadQuestions() {
-
-  // 🔒 SHOW SAVED SCORE IF EXISTS
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    showSavedScore(JSON.parse(saved));
-    return;
-  }
 
   const loadingEl = document.getElementById('loading');
   const quizEl = document.getElementById('quiz-container');
@@ -388,7 +381,7 @@ function skip() {
   showQuestion();
 }
 
-// SCORE + SAVE FIRST ATTEMPT
+// SCORE LOGIC
 function showScore() {
   let score = 0;
 
@@ -399,38 +392,52 @@ function showScore() {
   const total = allQuestions.length;
   const percent = Math.round((score / total) * 100);
 
-  if (!localStorage.getItem(STORAGE_KEY)) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+  let firstAttempt = sessionStorage.getItem(STORAGE_KEY);
+
+  // ✅ Save only first attempt in session
+  if (!firstAttempt) {
+    const data = {
       score,
       total,
       percent,
       name: studentName,
       class: studentClass,
       phone: studentPhone
-    }));
+    };
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    firstAttempt = JSON.stringify(data);
   }
 
-  showSavedScore({ score, total, percent, name: studentName, class: studentClass, phone: studentPhone });
+  showFinalScore(JSON.parse(firstAttempt), score, total, percent);
 }
 
-// SHOW SAVED SCORE (ON REFRESH)
-function showSavedScore(data) {
+// FINAL RESULT DISPLAY
+function showFinalScore(firstData, currentScore, currentTotal, currentPercent) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('quiz-container').style.display = 'block';
 
   document.getElementById('quiz-container').innerHTML = `
     <div class="question-card result-box">
-      <h2>Quiz Completed (First Attempt)</h2>
-      <div class="final-score">${data.score} / ${data.total}</div>
-      <div class="percentage">${data.percent}%</div>
 
-      <p><strong>Student Name:</strong> ${data.name}</p>
-      <p><strong>Class:</strong> ${data.class}</p>
-      <p><strong>Phone Number:</strong> ${data.phone}</p>
+      <h2>Quiz Completed</h2>
+
+      <div class="final-score">${currentScore} / ${currentTotal}</div>
+      <div class="percentage">${currentPercent}%</div>
+
+      <hr style="margin:20px 0; opacity:0.3;">
+
+      <h3 style="color:#00ffea;">First Attempt Score</h3>
+      <div class="final-score">${firstData.score} / ${firstData.total}</div>
+      <div class="percentage">${firstData.percent}%</div>
+
+      <p><strong>Student Name:</strong> ${firstData.name}</p>
+      <p><strong>Class:</strong> ${firstData.class}</p>
+      <p><strong>Phone Number:</strong> ${firstData.phone}</p>
 
       <a href="https://wa.me/233554454161" target="_blank">
-        Take a snapshot of this page and click here to send your score to Bush
+        Send your first attempt score to your teacher
       </a>
+
     </div>
   `;
 }
@@ -438,6 +445,5 @@ function showSavedScore(data) {
 window.onload = loadQuestions;
 
 </script>
-
 </body>
 </html>
