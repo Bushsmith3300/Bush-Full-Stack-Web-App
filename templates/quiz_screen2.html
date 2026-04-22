@@ -270,7 +270,7 @@ async function loadQuestions() {
   quizEl.style.display = 'none';
 
   try {
-    const res = await fetch('/questions/equilibrium');
+    const res = await fetch('/questions/electron_config');
     const data = await res.json();
 
     const validQuestions = data.questions.filter(q =>
