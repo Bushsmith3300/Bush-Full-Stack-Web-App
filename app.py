@@ -331,8 +331,11 @@ def enter_class():
 
 @app.route("/init-db")
 def init_db():
-    db.create_all()
-    return "Database initialized!"
+    try:
+        db.create_all()
+        return "Database initialized!"
+    except Exception as e:
+        return str(e)
 
 
 
