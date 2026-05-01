@@ -329,6 +329,11 @@ def enter_class():
 
     return redirect(class_status["link"])
 
+@app.route("/init-db")
+def init_db():
+    db.create_all()
+    return "Database initialized!"
+
 
 
 # ---------------- LOGOUT ----------------
