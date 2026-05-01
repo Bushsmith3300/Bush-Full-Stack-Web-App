@@ -149,17 +149,19 @@
 
      <h2>Log in with your BTA account details</h2>
 
-    <form method="POST" action="{{ url_for('login') }}">
+   <form method="POST" action="{{ url_for('login') }}">
 
-        <label>Username</label>
-        <input type="text" name="username" required>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <label>Password</label>
-        <input type="password" name="password" required>
+      <label>Username</label>
+      <input type="text" name="username" required>
 
-        <button type="submit">Login</button>
-    </form>
+      <label>Password</label>
+      <input type="password" name="password" required>
 
+      <button type="submit">Login</button>
+   </form>
+  
     <div class="register-link">
         <span style="color:#cc0000">Don't have an account?</span><a href="{{ url_for('register') }}"> Create a BTA account</a>
     </div>
