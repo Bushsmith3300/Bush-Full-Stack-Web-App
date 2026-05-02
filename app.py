@@ -46,6 +46,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
+with app.app_context():
+    db.create_all()
 
 
 # ---------------- STATIC DATA ----------------
@@ -331,11 +333,10 @@ def enter_class():
 
 @app.route("/init-db")
 def init_db():
-    try:
+    if not os.getenv("RENDER"):  # only allow locally
         db.create_all()
-        return "Database initialized!"
-    except Exception as e:
-        return str(e)
+        return "Database initialized locally!"
+    return "Not allowed in production"
 
 
 
