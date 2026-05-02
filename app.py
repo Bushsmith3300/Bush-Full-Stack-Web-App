@@ -122,7 +122,7 @@ def quiz(topic):
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User, session["user_id"])
 
     if not user:
         session.clear()
@@ -159,7 +159,7 @@ def announcement_page():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User, session["user_id"])
 
     if not user:
         session.clear()
@@ -286,7 +286,7 @@ def subject_select():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User, session["user_id"])
 
     return render_template("subject_select.html", user=user)
 
@@ -298,7 +298,7 @@ def topic_select():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User, session["user_id"])
 
     if request.method == "POST":
         selected = request.form.getlist("topics")
@@ -319,7 +319,7 @@ def enter_class():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User, session["user_id"])
 
     if not user:
         session.clear()
