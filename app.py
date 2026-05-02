@@ -343,59 +343,6 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/migrate")
-def migrate():
-    conn = sqlite3.connect("chemistry.db")
-    cursor = conn.cursor()
-
-    try:
-
-        # ---------------- USERS ----------------
-        cursor.execute("""
-            SELECT id, username, password, first_name, surname, other_name 
-            FROM users
-        """)
-        users = cursor.fetchall()
-
-        for u in users:
-            exists = User.query.filter_by(username=u[1]).first()
-            if not exists:
-               db.session.add(User(
-                  username=u[1],
-                  password=u[2],
-                  first_name=u[3],
-                  surname=u[4],
-                  other_name=u[5] ))
-
-        
-        # ---------------- QUESTIONS ----------------
-        cursor.execute("""
-            SELECT id, topic, question_text, option_a, option_b, option_c, option_d, correct_answer, explanation
-            FROM question
-        """)
-        questions = cursor.fetchall()
-
-        for q in questions:
-          db.session.add(Question(
-             topic=q[1],
-             question_text=q[2],
-             option_a=q[3],
-             option_b=q[4],
-             option_c=q[5],
-             option_d=q[6],
-             correct_answer=q[7],
-             explanation=q[8]))
-
-        db.session.commit()
-
-        return "Migration successful ✅"
-
-    except Exception as e:
-        return f"Migration failed: {str(e)}"
-
-    finally:
-        conn.close()
-
 
 @app.errorhandler(500)
 def server_error(e):
