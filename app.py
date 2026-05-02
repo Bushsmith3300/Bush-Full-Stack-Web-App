@@ -346,52 +346,37 @@ def logout():
 @app.route("/migrate")
 def migrate():
 
-    conn = sqlite3.connect("chemistry.db")
-    cursor = conn.cursor()
+    import sqlite3
+    import os
 
-    with app.app_context():
+    try:
+        conn = sqlite3.connect("chemistry.db")
+        cursor = conn.cursor()
 
-        # ---------------- USERS ----------------
-        cursor.execute("SELECT * FROM users")
-        users = cursor.fetchall()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
 
-        for u in users:
-            user = User(
-                id=u[0],
-                username=u[1],
-                password=u[2],
-                first_name=u[3],
-                surname=u[4],
-                other_name=u[5]
-            )
-            db.session.add(user)
+        cursor.execute("SELECT COUNT(*) FROM users")
+        user_count = cursor.fetchone()[0]
 
-        # ---------------- QUESTIONS ----------------
-        cursor.execute("SELECT * FROM question")
-        questions = cursor.fetchall()
+        cursor.execute("SELECT COUNT(*) FROM question")
+        question_count = cursor.fetchone()[0]
 
-        for q in questions:
-            question = Question(
-                id=q[0],
-                topic=q[1],
-                question_text=q[2],
-                option_a=q[3],
-                option_b=q[4],
-                option_c=q[5],
-                option_d=q[6],
-                correct_answer=q[7],
-                explanation=q[8]
-            )
-            db.session.add(question)
+        return {
+            "cwd": os.getcwd(),
+            "tables": tables,
+            "users": user_count,
+            "questions": question_count
+        }
 
-        db.session.commit()
+    except Exception as e:
+        return {"error": str(e)}
 
-    conn.close()
-
-    return jsonify({
-        "message": "Migration completed successfully"
-    })
-
+    finally:
+        try:
+            conn.close()
+        except:
+            pass
 
 @app.errorhandler(500)
 def server_error(e):
