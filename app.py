@@ -12,10 +12,12 @@ CORS(app)
 
 csrf = CSRFProtect(app)
 
-app.secret_key = os.getenv("SECRET_KEY", "Bhbush3300/")
+app.secret_key = os.getenv("SECRET_KEY")
 
-if not app.secret_key or len(app.secret_key) < 16:
-    raise ValueError("SECRET_KEY missing or too weak!")
+if not app.secret_key:
+    if os.getenv("RENDER"):
+        raise ValueError("SECRET_KEY must be set in production!")
+    app.secret_key = "Bhbush3300/"
 
 app.config["SESSION_PERMANENT"] = True
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
