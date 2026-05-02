@@ -333,14 +333,6 @@ def enter_class():
 
     return redirect(class_status["link"])
 
-@app.route("/init-db")
-def init_db():
-    if not os.getenv("RENDER"):  # only allow locally
-        db.create_all()
-        return "Database initialized locally!"
-    return "Not allowed in production"
-
-
 
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
