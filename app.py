@@ -345,39 +345,59 @@ def logout():
 
 @app.route("/migrate")
 def migrate():
-
-    import sqlite3
-    import os
+    conn = sqlite3.connect("chemistry.db")
+    cursor = conn.cursor()
 
     try:
-        conn = sqlite3.connect("chemistry.db")
-        cursor = conn.cursor()
 
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        tables = cursor.fetchall()
+        # ---------------- USERS ----------------
+        cursor.execute("""
+            SELECT id, username, password, first_name, surname, other_name 
+            FROM users
+        """)
+        users = cursor.fetchall()
 
-        cursor.execute("SELECT COUNT(*) FROM users")
-        user_count = cursor.fetchone()[0]
+        for u in users:
+            exists = User.query.filter_by(username=u[1]).first()
+            if not exists:
+                db.session.add(User(
+                    id=u[0],
+                    username=u[1],
+                    password=u[2],
+                    first_name=u[3],
+                    surname=u[4],
+                    other_name=u[5]
+                ))
 
-        cursor.execute("SELECT COUNT(*) FROM question")
-        question_count = cursor.fetchone()[0]
+        # ---------------- QUESTIONS ----------------
+        cursor.execute("""
+            SELECT id, topic, question_text, option_a, option_b, option_c, option_d, correct_answer, explanation
+            FROM question
+        """)
+        questions = cursor.fetchall()
 
-        return {
-            "cwd": os.getcwd(),
-            "tables": tables,
-            "users": user_count,
-            "questions": question_count
-        }
+        for q in questions:
+            db.session.add(Question(
+                id=q[0],
+                topic=q[1],
+                question_text=q[2],
+                option_a=q[3],
+                option_b=q[4],
+                option_c=q[5],
+                option_d=q[6],
+                correct_answer=q[7],
+                explanation=q[8]
+            ))
+
+        db.session.commit()
+
+        return "Migration successful ✅"
 
     except Exception as e:
-        return {"error": str(e)}
+        return f"Migration failed: {str(e)}"
 
     finally:
-        try:
-            conn.close()
-        except:
-            pass
-
+        conn.close()
 @app.errorhandler(500)
 def server_error(e):
     return render_template("500.html"), 500
