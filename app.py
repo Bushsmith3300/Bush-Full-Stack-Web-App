@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from datetime import timedelta
 from flask_wtf.csrf import CSRFProtect
 from flask import Flask, jsonify, request, render_template, redirect, url_for, session, flash
@@ -340,6 +341,56 @@ def logout():
     session.clear()
     flash("You have been logged out", "success")
     return redirect(url_for("login"))
+
+
+@app.route("/migrate")
+def migrate():
+
+    conn = sqlite3.connect("chemistry.db")
+    cursor = conn.cursor()
+
+    with app.app_context():
+
+        # ---------------- USERS ----------------
+        cursor.execute("SELECT * FROM users")
+        users = cursor.fetchall()
+
+        for u in users:
+            user = User(
+                id=u[0],
+                username=u[1],
+                password=u[2],
+                first_name=u[3],
+                surname=u[4],
+                other_name=u[5]
+            )
+            db.session.add(user)
+
+        # ---------------- QUESTIONS ----------------
+        cursor.execute("SELECT * FROM question")
+        questions = cursor.fetchall()
+
+        for q in questions:
+            question = Question(
+                id=q[0],
+                topic=q[1],
+                question_text=q[2],
+                option_a=q[3],
+                option_b=q[4],
+                option_c=q[5],
+                option_d=q[6],
+                correct_answer=q[7],
+                explanation=q[8]
+            )
+            db.session.add(question)
+
+        db.session.commit()
+
+    conn.close()
+
+    return jsonify({
+        "message": "Migration completed successfully"
+    })
 
 
 @app.errorhandler(500)
