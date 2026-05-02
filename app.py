@@ -12,7 +12,7 @@ CORS(app)
 
 csrf = CSRFProtect(app)
 
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key-12345")
 
 if not app.secret_key or len(app.secret_key) < 16:
     raise ValueError("SECRET_KEY missing or too weak!")
@@ -27,7 +27,7 @@ app.config["SESSION_COOKIE_SECURE"] = True
 
 database_url = os.getenv("DATABASE_URL")
 
-if database_url:
+if database_url and database_url.strip():
     if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
 
@@ -46,9 +46,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-if not os.getenv("RENDER"):  # only run locally
-    with app.app_context():
-        db.create_all()
+with app.app_context():
+    db.create_all()
 
 
 # ---------------- STATIC DATA ----------------
