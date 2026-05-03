@@ -62,7 +62,7 @@ with app.app_context():
 
 announcements = [{
     "title": "Form 2 end of Semester Examination",
-    "message": "Study Chemical Equilibrium and Acids, Bases and Salts in addition to topics treated in class",
+    "message": "Kindly make sure to study Chemical Equilibrium and Acids, Bases and Salts in addition to topics treated in class",
     "date": "25th May 2026 to 5th June 2026",
     "time": ""},
 
