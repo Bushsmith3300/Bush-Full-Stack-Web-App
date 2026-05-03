@@ -180,7 +180,6 @@ def announcement_page():
 # ---------------- REGISTER ----------------
 
 @app.route("/register", methods=["GET", "POST"])
-@limiter.limit("5 per minute")
 def register():
     if request.method == "POST":
 
@@ -246,7 +245,6 @@ def register():
 
 # ---------------- LOGIN ----------------
 @app.route("/login", methods=["GET", "POST"])
-@limiter.limit("5 per minute")
 def login():
     if request.method == "POST":
 
