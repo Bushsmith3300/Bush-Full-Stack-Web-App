@@ -7,15 +7,12 @@ from flask_cors import CORS
 from models import db, Question, User, QuizHistory, UserProgress
 from sqlalchemy import func, inspect
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-import re
+
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 csrf = CSRFProtect(app)
-limiter = Limiter(get_remote_address, app=app)
 
 app.secret_key = os.getenv("SECRET_KEY")
 
