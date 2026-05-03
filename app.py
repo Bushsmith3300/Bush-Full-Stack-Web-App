@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from datetime import timedelta
-from flask_wtf.csrf import CSRFProtect
 from flask import Flask, jsonify, request, render_template, redirect, url_for, session, flash
 from flask_cors import CORS
 from models import db, Question, User, QuizHistory, UserProgress
