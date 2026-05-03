@@ -4,4 +4,3 @@ psycopg2-binary
 flask_sqlalchemy
 flask_cors
 flask_wtf
-flask-limiter
