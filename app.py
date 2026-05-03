@@ -12,7 +12,7 @@ from flask_limiter.util import get_remote_address
 import re
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://bta-330.onrender.com"}})
+CORS(app)
 
 csrf = CSRFProtect(app)
 limiter = Limiter(get_remote_address, app=app)
