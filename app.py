@@ -12,8 +12,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 CORS(app)
 
-csrf = CSRFProtect(app)
-
 app.secret_key = os.getenv("SECRET_KEY")
 
 if not app.secret_key:
