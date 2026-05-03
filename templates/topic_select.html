@@ -213,7 +213,7 @@ footer {
 
 <script>
 function startQuiz(topic) {
-  const cleanTopic = topic.toLowerCase().trim();
+  const cleanTopic = topic;
 
   // ✅ CORRECT ROUTE
   window.location.href = `/quiz/${encodeURIComponent(cleanTopic)}`;
