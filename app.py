@@ -9,7 +9,7 @@ from sqlalchemy import func, inspect
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://bta-330.onrender.com"}})
 
 csrf = CSRFProtect(app)
 
