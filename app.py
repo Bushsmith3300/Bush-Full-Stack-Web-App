@@ -12,7 +12,7 @@ from flask_limiter.util import get_remote_address
 import re
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 csrf = CSRFProtect(app)
 limiter = Limiter(get_remote_address, app=app)
