@@ -6,6 +6,7 @@ from flask_cors import CORS
 from models import db, Question, User, QuizHistory, UserProgress
 from sqlalchemy import func, inspect
 from werkzeug.security import generate_password_hash, check_password_hash
+import re
 
 
 app = Flask(__name__)
