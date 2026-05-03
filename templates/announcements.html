@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+0<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8">
@@ -176,7 +176,7 @@
     {% if announcements %}
         {% for ann in announcements %}
         <div class="card">
-            <div class="title">{{ ann.title }}</div>
+            <div class="title">{{ ann.title }}</div><br>
             <div class="message"> <span style="color: #adf802"> {{ ann.message }} </span></div>
             <div class="date"> <span style="color:#32cd32"> Date: {{ ann.date }} </span></div>         
             <div class="date"> <span style="color:red"> Time: {{ ann.time }} </span></div>        
@@ -191,7 +191,7 @@
         </div>
     {% endif %}
 
-     <div> {{ today_quote.title }} </div>
+     <div> {{ today_quote.title }} </div><br>
      <div> {{ today_quote.message }} </div>
      <div> {{ today_quote.action }} </div>
   
