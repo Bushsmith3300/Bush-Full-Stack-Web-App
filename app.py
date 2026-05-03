@@ -7,11 +7,15 @@ from flask_cors import CORS
 from models import db, Question, User, QuizHistory, UserProgress
 from sqlalchemy import func, inspect
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import re
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "https://bta-330.onrender.com"}})
 
 csrf = CSRFProtect(app)
+limiter = Limiter(get_remote_address, app=app)
 
 app.secret_key = os.getenv("SECRET_KEY")
 
@@ -178,44 +182,65 @@ def announcement_page():
 
 # ---------------- REGISTER ----------------
 
-
 @app.route("/register", methods=["GET", "POST"])
+@limiter.limit("5 per minute")
 def register():
     if request.method == "POST":
 
-        username = request.form["username"].strip()
-        password = request.form["password"]
-        confirm_password = request.form["confirm_password"]
+        # --- Get and normalize input ---
+        username = request.form.get("username", "").strip().lower()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
-        first_name = request.form["first_name"]
-        surname = request.form["surname"]
-        other_name = request.form.get("other_name", "")
+        first_name = request.form.get("first_name", "").strip()
+        surname = request.form.get("surname", "").strip()
+        other_name = request.form.get("other_name", "").strip()
 
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
-            flash("You already have a BTA account", "success")
-            return redirect(url_for("login"))
+        # --- Validation ---
+        if not username or len(username) < 3:
+            flash("Username must be at least 3 characters", "error")
+            return redirect(url_for("register"))
+
+        if not re.match(r"^[a-z0-9_]+$", username):
+            flash("Username can only contain letters, numbers, and underscore", "error")
+            return redirect(url_for("register"))
+
+        if len(password) < 6:
+            flash("Password must be at least 6 characters", "error")
+            return redirect(url_for("register"))
 
         if password != confirm_password:
             flash("Passwords do not match", "error")
             return redirect(url_for("register"))
 
+        if not first_name or not surname:
+            flash("First name and surname are required", "error")
+            return redirect(url_for("register"))
+
+        # --- Check existing user ---
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash("You already have a BTA account. Login in instead !", "error")
+            return redirect(url_for("login"))
+
+        # --- Create user ---
         new_user = User(
             username=username,
             password=generate_password_hash(password),
             first_name=first_name,
             surname=surname,
-            other_name=other_name)
+            other_name=other_name
+        )
 
         db.session.add(new_user)
-        db.session.flush()  # get user.id without commit
+        db.session.flush()
 
         progress = UserProgress(user_id=new_user.id)
         db.session.add(progress)
 
         db.session.commit()
 
-        flash("Registration successful! Please login.", "success")
+        flash("Registration successful. Please log in.", "success")
         return redirect(url_for("login"))
 
     return render_template("register.html")
@@ -224,35 +249,36 @@ def register():
 
 # ---------------- LOGIN ----------------
 @app.route("/login", methods=["GET", "POST"])
+@limiter.limit("5 per minute")
 def login():
     if request.method == "POST":
 
-        username = request.form["username"].strip()
-        password = request.form["password"]
+        # --- Get and normalize input ---
+        username = request.form.get("username", "").strip().lower()
+        password = request.form.get("password", "")
 
+        # --- Basic validation ---
+        if not username or not password:
+            flash("Invalid username or password", "error")
+            return redirect(url_for("login"))
+
+        # --- Query user ---
         user = User.query.filter_by(username=username).first()
 
-        if not user:
-            flash("Username does not exist! Create an account", "error")
+        # --- Secure authentication (no user enumeration) ---
+        if not user or not check_password_hash(user.password, password):
+            flash("Invalid username or password", "error")
             return redirect(url_for("login"))
 
-        if not check_password_hash(user.password, password):
-            flash("Incorrect password", "error")
-            return redirect(url_for("login"))
-
-        # 🔐 Regenerate session (important security step)
-
+        # --- Secure session handling ---
         session.clear()
         session["user_id"] = user.id
         session["username"] = user.username
-
-        session.permanent = True  # ( makes session expire based on config time )
-
+        session.permanent = True
 
         return redirect(url_for("dashboard"))
 
     return render_template("login.html")
-
 
 #---------DASHBOARD-----------------
 
