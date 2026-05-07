@@ -93,9 +93,7 @@ def get_questions(topic):
     topic = topic.lower().strip()
 
     # ✅ RANDOMIZED QUESTIONS
-    questions = Question.query.filter(
-        Question.topic.ilike(f"%{topic}%")
-    ).order_by(func.random()).all()
+    questions = Question.query.filter(Question.topic.ilike(f"%{topic}%")).order_by(func.random()).all()
 
     return jsonify({
         "questions": [
