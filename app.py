@@ -75,7 +75,7 @@ today_quote = {
 
 
 class_status = {
-    "is_live": False,
+    "is_live": True,
     "link": "https://meet.google.com"
 }
 
