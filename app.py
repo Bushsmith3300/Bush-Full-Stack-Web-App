@@ -75,7 +75,7 @@ today_quote = {
 
 
 class_status = {
-    "is_live": True,
+    "is_live": False,
     "link": "https://meet.google.com/cgv-qbhr-jsh"
 }
 
