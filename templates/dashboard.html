@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Standard Chemistry Questions for Ghanaian SHS Learners!">
-  <meta name="author" content="Emmanuel Asiamah Amponsah">
-  <meta name="keywords" content="chemistry, past questions, WAEC, teaching assistant, asiamah, learn">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="Standard Chemistry Questions for Ghanaian SHS Learners!">
+<meta name="author" content="Emmanuel Asiamah Amponsah">
+<meta name="keywords" content="chemistry, past questions, WAEC, teaching assistant, asiamah, learn">
+
 <title>BTA Dashboard</title>
 
 <style>
+
+    *{
+        box-sizing: border-box;
+    }
+
     body {
         margin: 0;
         font-family: 'Segoe UI', Arial, sans-serif;
@@ -40,8 +47,36 @@
     .welcome {
         font-size: 18px;
         margin-bottom: 20px;
-        color:orange;
+        color: orange;
+        font-weight: bold;
     }
+
+    /* FLASH MESSAGES */
+
+    .flash {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .flash.error {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .flash.success {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .flash.warning {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    /* CARDS */
 
     .card {
         background: #f4f6f9;
@@ -49,6 +84,11 @@
         border-radius: 10px;
         text-align: left;
         margin-bottom: 20px;
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
     }
 
     .card h3 {
@@ -62,16 +102,23 @@
     }
 
     /* CLASS STATUS */
+
     .class-status {
         margin: 15px 0;
         font-weight: bold;
         font-size: 14px;
     }
 
-    .live { color: #28a745; }
-    .offline { color: #dc3545; }
+    .live {
+        color: #28a745;
+    }
+
+    .offline {
+        color: #dc3545;
+    }
 
     /* BUTTONS */
+
     .btn-grid {
         display: grid;
         gap: 12px;
@@ -87,27 +134,53 @@
         display: block;
         font-weight: 500;
         transition: 0.3s;
+        border: none;
     }
 
-    .practice { background: #28a745; }
-    .practice:hover { background: #218838; }
+    .btn:active {
+        transform: scale(0.98);
+    }
 
-    .teacher { background: #007bff; }
-    .teacher:hover { background: #0056b3; }
+    .practice {
+        background: #28a745;
+    }
 
-    .announcement { background: #6f42c1; }
-    .announcement:hover { background: #5a32a3; }
+    .practice:hover {
+        background: #218838;
+    }
 
-    .class { background: #ff9800; }
-    .class:hover { background: #e68900; }
+    .teacher {
+        background: #007bff;
+    }
+
+    .teacher:hover {
+        background: #0056b3;
+    }
+
+    .announcement {
+        background: #6f42c1;
+    }
+
+    .announcement:hover {
+        background: #5a32a3;
+    }
+
+    .class {
+        background: #ff9800;
+    }
+
+    .class:hover {
+        background: #e68900;
+    }
 
     .disabled {
-        background: gray !important;
+        background: #999 !important;
         cursor: not-allowed;
-        opacity: 0.7;
+        opacity: 0.6;
     }
 
     /* LOGOUT */
+
     .logout {
         margin-top: 20px;
     }
@@ -123,11 +196,13 @@
     }
 
     /* FOOTER */
+
     footer {
         width: 100%;
         max-width: 550px;
         text-align: center;
-        font-size: 13px;
+        font-size: 12px;
+        letter-spacing: 0.5px;
         color: #eaeaea;
         padding: 15px 10px;
         margin-top: auto;
@@ -137,6 +212,29 @@
     footer p {
         margin: 4px 0;
     }
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+
+        .container {
+            padding: 20px;
+        }
+
+        .btn {
+            font-size: 15px;
+            padding: 14px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        .welcome {
+            font-size: 16px;
+        }
+    }
+
 </style>
 </head>
 
@@ -150,31 +248,73 @@
         Welcome, {{ user.first_name }}
     </div>
 
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
     <!-- LAST QUIZ -->
 
-   <div class="card">
-    <h3>Last Quiz</h3>   
+    <div class="card">
 
-    {% if last_quiz %}
-        <p><strong>Topic:</strong> {{ last_quiz.topic }}</p>
-        <p><strong>Date:</strong> {{ last_quiz.date }}</p>
-    {% else %}
-        <p>No quiz taken yet.</p>
+        <h3>Last Quiz</h3>
+
+        {% if last_quiz %}
+            <p><strong>Topic:</strong> {{ last_quiz.topic }}</p>
+            <p><strong>Date:</strong> {{ last_quiz.date }}</p>
+        {% else %}
+            <p>No quiz taken yet.</p>
+        {% endif %}
+
+    </div>
+
+    <!-- OPTIONAL PROGRESS CARD -->
+
+    {% if total_quizzes is defined %}
+
+    <div class="card">
+
+        <h3>Your Progress</h3>
+
+        <p>
+            <strong>Total Quizzes:</strong>
+            {{ total_quizzes }}
+        </p>
+
+        <p>
+            <strong>Average Score:</strong>
+            {{ average_score }}%
+        </p>
+
+    </div>
+
     {% endif %}
-</div>
-
 
     <!-- CLASS STATUS -->
+
     <div class="class-status">
+
         {% if class_status["is_live"] %}
-            <span class="live">● LIVE CLASS is on-going. Click Enter Class to join</span>
+            <span class="live">
+                ● LIVE CLASS is on-going. Click Enter Class to join
+            </span>
         {% else %}
-            <span class="offline">● NO LIVE class now</span>
+            <span class="offline">
+                ● NO LIVE class now
+            </span>
         {% endif %}
+
     </div>
 
     <!-- BUTTONS -->
+
     <div class="btn-grid">
 
         <a href="{{ url_for('subject_select') }}" class="btn practice">
@@ -186,24 +326,31 @@
         </a>
 
         <a href="{{ url_for('announcement_page') }}" class="btn announcement">
-           Class Announcement
+            Class Announcement
         </a>
 
         {% if class_status["is_live"] %}
+
             <a href="{{ url_for('enter_class') }}" class="btn class">
                 Enter Class
             </a>
+
         {% else %}
+
             <button class="btn class disabled" disabled>
                 Enter Class
             </button>
+
         {% endif %}
 
     </div>
 
     <!-- LOGOUT -->
+
     <div class="logout">
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
     </div>
 
 </div>
