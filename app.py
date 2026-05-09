@@ -29,6 +29,12 @@ app.config["SESSION_COOKIE_SECURE"] = True
 
 database_url = os.getenv("DATABASE_URL")
 
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "connect_args": {
+        "sslmode": "require"
+    }
+}
+
 if database_url and database_url.strip():
     if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
