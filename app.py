@@ -370,6 +370,12 @@ def logout():
     return redirect(url_for("login"))
 
 
+#-----CHECK WHICH DATABASE IS BEING USED----------
+@app.route("/db-check")
+def db_check():
+    return {
+        "database_url": str(app.config["SQLALCHEMY_DATABASE_URI"])
+    }
 
 @app.errorhandler(500)
 def server_error(e):
