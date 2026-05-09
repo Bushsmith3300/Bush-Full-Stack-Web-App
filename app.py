@@ -29,7 +29,7 @@ app.config["SESSION_COOKIE_SECURE"] = True
 database_url = os.getenv("DATABASE_URL")
 
 # PostgreSQL SSL settings
-if database_url and database_url.startswith("postgres"):
+if database_url and "postgres" in database_url:
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "connect_args": {
             "sslmode": "require"
@@ -37,18 +37,21 @@ if database_url and database_url.startswith("postgres"):
     }
 
 if database_url and database_url.strip():
+
     if database_url.startswith("postgres://"):
-        database_url = database_url.replace("postgres://", "postgresql://", 1)
+        database_url = database_url.replace(
+            "postgres://",
+            "postgresql://",
+            1
+        )
 
     app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 
 else:
-    # 🔐 block production fallback to SQLite
-   if os.environ.get("RENDER_ENV") == "production":
+    if os.getenv("RENDER"):
         raise ValueError("Production requires PostgreSQL")
 
-   app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///chemistry.db"
-
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///chemistry.db"
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
