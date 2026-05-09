@@ -11,51 +11,54 @@ import re
 app = Flask(__name__)
 CORS(app)
 
+# ---------------- SECRET KEY ----------------
 app.secret_key = os.getenv("SECRET_KEY")
 
 if not app.secret_key:
-    if os.getenv("RENDER"):
+    if os.getenv("RENDER_ENV") == "production":
         raise ValueError("SECRET_KEY must be set in production!")
-    app.secret_key = "Bhbush3300/"
+    app.secret_key = "dev-secret-key-change-this"
 
+
+# ---------------- SESSION SECURITY ----------------
 app.config["SESSION_PERMANENT"] = True
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
 app.config["PREFERRED_URL_SCHEME"] = "https"
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_NAME"] = "__Host-session"
 
 
+# ---------------- DATABASE ----------------
 database_url = os.getenv("DATABASE_URL")
 
-# PostgreSQL SSL settings
-if database_url and "postgres" in database_url:
+if not database_url:
+    if os.getenv("RENDER_ENV") == "production":
+        raise ValueError("DATABASE_URL must be set in production")
+    database_url = "sqlite:///chemistry.db"
+
+
+# FIX: convert deprecated postgres:// → postgresql://
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+
+# FIX: SSL config ONLY for PostgreSQL
+if database_url.startswith("postgresql://"):
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "connect_args": {
             "sslmode": "require"
-        }
+        },
+        "pool_pre_ping": True,
+        "pool_recycle": 300
     }
 
-if database_url and database_url.strip():
-
-    if database_url.startswith("postgres://"):
-        database_url = database_url.replace(
-            "postgres://",
-            "postgresql://",
-            1
-        )
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_url
-
-else:
-    if os.getenv("RENDER"):
-        raise ValueError("Production requires PostgreSQL")
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///chemistry.db"
-
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
+# ---------------- INIT DB ----------------
 db.init_app(app)
 
 
