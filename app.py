@@ -47,7 +47,7 @@ else:
    if os.environ.get("RENDER_ENV") == "production":
         raise ValueError("Production requires PostgreSQL")
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///chemistry.db"
+   app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///chemistry.db"
 
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
