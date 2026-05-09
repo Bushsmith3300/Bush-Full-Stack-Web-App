@@ -1,10 +1,9 @@
 import os
-import sqlite3
 from datetime import timedelta
 from flask import Flask, jsonify, request, render_template, redirect, url_for, session, flash
 from flask_cors import CORS
 from models import db, Question, User, QuizHistory, UserProgress
-from sqlalchemy import func, inspect
+from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 
@@ -29,11 +28,13 @@ app.config["SESSION_COOKIE_SECURE"] = True
 
 database_url = os.getenv("DATABASE_URL")
 
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "connect_args": {
-        "sslmode": "require"
+# PostgreSQL SSL settings
+if database_url and database_url.startswith("postgres"):
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "connect_args": {
+            "sslmode": "require"
+        }
     }
-}
 
 if database_url and database_url.strip():
     if database_url.startswith("postgres://"):
@@ -43,7 +44,7 @@ if database_url and database_url.strip():
 
 else:
     # 🔐 block production fallback to SQLite
-    if os.getenv("RENDER"):
+   if os.environ.get("RENDER_ENV") == "production":
         raise ValueError("Production requires PostgreSQL")
 
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///chemistry.db"
