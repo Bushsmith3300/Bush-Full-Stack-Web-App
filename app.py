@@ -55,6 +55,7 @@ if database_url.startswith("postgresql://"):
     }
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # if database_url.startswith("postgresql://"):
 #     print("Using PostgreSQL")
@@ -63,7 +64,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 # else:
 #     print("Unknown database")
     
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 
 # ---------------- INIT DB ----------------
