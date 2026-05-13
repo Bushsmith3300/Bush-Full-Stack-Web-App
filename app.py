@@ -55,22 +55,20 @@ if database_url.startswith("postgresql://"):
     }
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+
+if database_url.startswith("postgresql://"):
+    print("Using PostgreSQL")
+elif database_url.startswith("sqlite:///"):
+    print("Using SQLite")
+else:
+    print("Unknown database")
+    
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
 # ---------------- INIT DB ----------------
 db.init_app(app)
 
-with app.app_context():
-    try:
-        if "postgresql" in str(db.engine.url):
-            print("Using PostgreSQL")
-        else:
-            print("Using SQLite")
-    except Exception as e:
-        print("Database check failed:", e)
-
-return app
 
 # ---------------- STATIC DATA ----------------
 
