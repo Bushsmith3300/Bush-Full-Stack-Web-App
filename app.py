@@ -66,7 +66,7 @@ with app.app_context():
     else:
         print("Using SQLite")
 
-    return app
+return app
 
 # ---------------- STATIC DATA ----------------
 
