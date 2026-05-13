@@ -17,7 +17,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 if not app.secret_key:
     if os.getenv("RENDER_ENV") == "production":
         raise ValueError("SECRET_KEY must be set in production!")
-    app.secret_key = "dev-secret-key-change-this"
+    app.secret_key = "------------"
 
 
 # ---------------- SESSION SECURITY ----------------
@@ -57,12 +57,12 @@ if database_url.startswith("postgresql://"):
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# if database_url.startswith("postgresql://"):
-#     print("Using PostgreSQL")
-# elif database_url.startswith("sqlite:///"):
-#     print("Using SQLite")
-# else:
-#     print("Unknown database")
+if database_url.startswith("postgresql://"):
+     print("Using PostgreSQL")
+elif database_url.startswith("sqlite:///"):
+     print("Using SQLite")
+else:
+     print("Unknown database")
     
 
 
