@@ -60,11 +60,15 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # ---------------- INIT DB ----------------
 db.init_app(app)
+
 with app.app_context():
-    if "postgresql" in str(db.engine.url):
-        print("Using PostgreSQL")
-    else:
-        print("Using SQLite")
+    try:
+        if "postgresql" in str(db.engine.url):
+            print("Using PostgreSQL")
+        else:
+            print("Using SQLite")
+    except Exception as e:
+        print("Database check failed:", e)
 
 return app
 
