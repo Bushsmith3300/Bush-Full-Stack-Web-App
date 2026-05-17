@@ -82,7 +82,7 @@ announcements = {
 
 today_quote = {
     "title": "Quote of the Day",
-    "message": “Great students are not born great -- they become great through discipline, consistency, and courage!",
+    "message": "Great students are not born great -- they become great through discipline, consistency, and courage!",
     "action": "Safe journey back to school!"
 }
 
