@@ -5,3 +5,4 @@ flask_sqlalchemy
 flask_cors
 flask_wtf
 python-dotenv
+flask-Migrate
