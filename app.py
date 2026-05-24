@@ -210,7 +210,7 @@ def announcement_page():
 
     return render_template(
         "announcements.html",
-        announcement=announcements,
+        announcements=announcements,
         user=user,
         today_quote=quote
     )
