@@ -190,6 +190,7 @@ def announcement_page():
         return redirect(url_for("login"))
 
     user = db.session.get(User, session["user_id"])
+    announcement = Announcement.query.all()
 
     if not user:
         session.clear()
@@ -197,7 +198,7 @@ def announcement_page():
 
     return render_template(
         "announcements.html",
-        announcements=announcements,
+        announcement=announcement,
         user=user,
         today_quote=today_quote
     )
@@ -377,6 +378,8 @@ def dashboard():
         .order_by(QuizHistory.date.desc())
         .first()
     )
+
+    class_status = ClassStatus.query.all()
 
     return render_template(
         "dashboard.html",
