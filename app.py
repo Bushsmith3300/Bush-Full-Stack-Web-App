@@ -112,45 +112,6 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 
-# ---------------- STATIC DATA ----------------
-announcements = [
-    {
-        "title": "Form 2 End of Semester Examination",
-        "message": (
-            "Kindly make sure to study Chemical Equilibrium "
-            "and Acids, Bases and Salts in addition to "
-            "topics treated in class"
-        ),
-        "date": "25th May 2026 to 5th June 2026",
-        "time": ""
-    },
-
-    {
-        "title": "Chemistry Online Class",
-        "message": (
-            "There will be an online chemistry class for "
-            "2 Science 7, 8, 9, 10 and 11"
-        ),
-        "date": "Friday 8th May, 2026",
-        "time": "4:00 pm"
-    }
-]
-
-today_quote = {
-    "title": "Quote of the Day",
-    "message": (
-        "Loneliness is the price you pay "
-        "to achieve academic excellence!"
-    ),
-    "action": "Make it count!"
-}
-
-class_status = {
-    "is_live": False,
-    "link": "https://meet.google.com/cgv-qbhr-jsh"
-}
-
-
 # ---------------- HOME ----------------
 @app.route("/")
 def index():
