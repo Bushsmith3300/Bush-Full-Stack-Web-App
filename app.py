@@ -19,7 +19,16 @@ from flask_migrate import Migrate
 from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from models import db, Question, User, QuizHistory, UserProgress
+from models import (
+    db,
+    Question,
+    User,
+    QuizHistory,
+    UserProgress,
+    Announcement,
+    ClassStatus,
+    Quote
+)
 
 
 # ---------------- LOAD ENV ----------------
@@ -190,17 +199,20 @@ def announcement_page():
         return redirect(url_for("login"))
 
     user = db.session.get(User, session["user_id"])
-    announcement = Announcement.query.all()
 
     if not user:
         session.clear()
         return redirect(url_for("login"))
 
+    announcements = Announcement.query.all()
+
+    quote = Quote.query.first()
+
     return render_template(
         "announcements.html",
-        announcement=announcement,
+        announcement=announcements,
         user=user,
-        today_quote=today_quote
+        today_quote=quote
     )
 
 
@@ -379,13 +391,16 @@ def dashboard():
         .first()
     )
 
-    class_status = ClassStatus.query.all()
+    status = ClassStatus.query.first()
+
+    quote = Quote.query.first()
 
     return render_template(
         "dashboard.html",
         user=user,
         last_quiz=last_quiz,
-        class_status=class_status
+        class_status=status,
+        today_quote=quote
     )
 
 
@@ -456,14 +471,16 @@ def enter_class():
         session.clear()
         return redirect(url_for("login"))
 
-    if not class_status["is_live"]:
+    status = ClassStatus.query.first()
+
+    if not status or not status.is_live:
         flash(
             "Class is not live yet",
             "error"
         )
         return redirect(url_for("dashboard"))
 
-    return redirect(class_status["link"])
+    return redirect(status.link)
 
 
 # ---------------- LOGOUT ----------------
@@ -497,3 +514,6 @@ def server_error(e):
     return render_template("500.html"), 500
 
 
+# ---------------- RUN APP ----------------
+if __name__ == "__main__":
+    app.run(debug=True)
