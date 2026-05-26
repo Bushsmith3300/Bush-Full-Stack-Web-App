@@ -150,6 +150,7 @@
      <h2>Log in with your BTA account details</h2>
 
    <form method="POST" action="{{ url_for('login') }}">
+   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"  
 
 
       <label>Username</label>
