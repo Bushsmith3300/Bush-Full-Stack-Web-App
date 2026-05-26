@@ -15,6 +15,7 @@ from flask import (
 )
 
 from flask_cors import CORS
+from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
 from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -119,6 +120,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
 migrate = Migrate(app, db)
+
+CSRFProtect(app)
 
 
 # ---------------- HOME ----------------
