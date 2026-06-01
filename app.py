@@ -316,7 +316,7 @@ def register():
         db.session.commit()
 
         flash(
-            "Registration successful. Please log in.",
+            "Registration successful!",
             "success"
         )
 
