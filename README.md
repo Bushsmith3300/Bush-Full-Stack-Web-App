@@ -180,12 +180,12 @@ Configure the environment variables required by the application.
 
 Example:
 
-SECRET_KEY=your_secret_key
-DATABASE_URL=your_database_connection_string
+SECRET_KEY=my_secret_key
+DATABASE_URL=my_database_connection_string
 
 Additional environment variables may be required depending on the application configuration.
 
-Never commit passwords, API keys or other sensitive credentials to GitHub.
+I should never commit passwords, API keys or other sensitive credentials to GitHub.
 
 6. Run Database Migrations
 
@@ -227,7 +227,7 @@ Bush Teaching Assistant is an ongoing software development project. The platform
 
 Developer
 
-Developer: Bushsmith3300
+Developer: Emmanuel Asiamah Amponsah
 
 Professional Role: Python Software Developer
 
